@@ -1,0 +1,38 @@
+services:
+  ################################################
+  #                Transport                     #
+  ################################################
+  notification.transport.email:
+    class: Sokil\NotificationBundle\Transport\EmailTransport
+    arguments:
+      - @mailer
+      - %from_email_address%
+      - %from_email_sender_name%
+
+  notification.transport_provider:
+    class: Sokil\NotificationBundle\TransportProvider
+    calls:
+      - [setTransport, ['email', '@notification.transport.email']]
+
+  ################################################
+  #                Schema                        #
+  ################################################
+  notification.schema_provider:
+    class: Sokil\NotificationBundle\Schema\ConfigurationProvider
+    arguments:
+      - '%notification.schema%'
+
+  ################################################
+  #                Message                       #
+  ################################################
+  notification.message_builder:
+    class: Sokil\NotificationBundle\MessageBuilder
+    arguments:
+      - @templating
+      - @translator
+      - @notification.text_diff_renderer
+
+  notification.text_diff_renderer:
+    class: Sokil\Diff\Renderer
+    arguments:
+      - {format: '%notification.diff_renderer.format_colour%'}

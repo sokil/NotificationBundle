@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <title>{% block title %}{% endblock %}{% trans %}SITE_TITLE{% endtrans %}</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#5bc0de">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+{% block javascripts %}{% endblock %}
+</html>
