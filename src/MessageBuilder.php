@@ -5,7 +5,6 @@ namespace Sokil\NotificationBundle;
 use Sokil\Diff\Renderer;
 use Sokil\NotificationBundle\Message\DiffRendererAwareInterface;
 use Sokil\NotificationBundle\Message\MessageInterface;
-use Sokil\TaskStockBundle\Notification\Message\styring;
 use Sokil\NotificationBundle\Message\MessageFixtureInterface;
 
 use Sokil\NotificationBundle\Message\TemplateAwareInterface;
@@ -59,14 +58,14 @@ class MessageBuilder
 
     /**
      * @param string $messageType
-     * @param styring $transportType
+     * @param string $transportType
      * @return MessageInterface
      * @throws \Exception
      */
     public function createMessage($messageType, $transportType)
     {
         if (empty($this->messageClasses[$messageType][$transportType])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Message with name %s for transport %s not found',
                 $messageType,
                 $transportType
@@ -101,13 +100,13 @@ class MessageBuilder
     {
         $fixtureClassName = get_class($message) . 'Fixture';
         if (!class_exists($fixtureClassName)) {
-            throw new \InvalidArgumentException('Message fixture class not found');
+            throw new InvalidArgumentException('Message fixture class not found');
         }
 
         /** @var MessageFixtureInterface $messageFixture */
         $messageFixture = new $fixtureClassName;
         if (!($messageFixture instanceof MessageFixtureInterface)) {
-            throw new \InvalidArgumentException('Fixture must implement MessageFixtureInterface');
+            throw new InvalidArgumentException('Fixture must implement MessageFixtureInterface');
         }
 
         $messageFixture->apply($message);

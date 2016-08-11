@@ -2,8 +2,10 @@
 
 namespace Sokil\NotificationBundle\Transport;
 
+use Sokil\NotificationBundle\InvalidArgumentException;
 use Sokil\NotificationBundle\Message\EmailMessageInterface;
 use Sokil\NotificationBundle\Message\MessageInterface;
+use Sokil\NotificationBundle\NotificationException;
 
 class EmailTransport implements TransportInterface
 {
@@ -38,7 +40,7 @@ class EmailTransport implements TransportInterface
         /* @var $mailerMessage \Swift_Message */
 
         if (!($message instanceof EmailMessageInterface)) {
-            throw new \InvalidArgumentException('Message must implament EmailMessageInterface');
+            throw new InvalidArgumentException('Message must implament EmailMessageInterface');
         }
 
         $mailerMessage = $this->mailer->createMessage();
@@ -49,6 +51,10 @@ class EmailTransport implements TransportInterface
             ->setBody($message->getBody(), 'text/html');
 
         // send
-        $this->mailer->send($mailerMessage);
+        try {
+            $successfullyReceivedRecipientNumber = $this->mailer->send($mailerMessage);
+        } catch (\Swift_SwiftException $e) {
+            throw new NotificationException('Error sending notification. ' . $e->getMessage(), 0, $e);
+        }
     }
 }

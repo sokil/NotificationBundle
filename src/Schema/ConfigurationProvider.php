@@ -2,6 +2,8 @@
 
 namespace Sokil\NotificationBundle\Schema;
 
+use Sokil\NotificationBundle\NotificationException;
+
 class ConfigurationProvider
 {
     private $configurations;
@@ -11,6 +13,9 @@ class ConfigurationProvider
         $this->configurations = $configurations;
     }
 
+    /**
+     * @return \Generator
+     */
     public function getConfigurations()
     {
         foreach ($this->configurations as &$configuration) {
@@ -28,8 +33,8 @@ class ConfigurationProvider
 
     /**
      * @param $schemaId
-     * @return Schema
-     * @throws \Exception
+     * @return Configuration
+     * @throws NotificationException
      */
     public function getConfiguration($schemaId)
     {
@@ -40,6 +45,6 @@ class ConfigurationProvider
             }
         }
 
-        throw new \Exception('Wrong schema id');
+        throw new NotificationException('Wrong schema id');
     }
 }

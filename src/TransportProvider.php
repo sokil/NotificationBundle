@@ -30,7 +30,7 @@ class TransportProvider
     public function getTransport($transportType)
     {
         if (empty($this->transport[$transportType])) {
-            throw new \Exception(sprintf('Transport %s not found', $transportType));
+            throw new InvalidArgumentException(sprintf('Transport %s not found', $transportType));
         }
 
         return $this->transport[$transportType];
