@@ -43,15 +43,15 @@ class EmailTransport implements TransportInterface
             throw new InvalidArgumentException('Message must implament EmailMessageInterface');
         }
 
-        $mailerMessage = $this->mailer->createMessage();
-        $mailerMessage
-            ->setBcc($recipients)
-            ->setSubject($message->getSubject())
-            ->setFrom($this->senderEmail, $this->senderName)
-            ->setBody($message->getBody(), 'text/html');
-
-        // send
         try {
+            $mailerMessage = $this->mailer->createMessage();
+            $mailerMessage
+                ->setBcc($recipients)
+                ->setSubject($message->getSubject())
+                ->setFrom($this->senderEmail, $this->senderName)
+                ->setBody($message->getBody(), 'text/html');
+
+            // send
             $successfullyReceivedRecipientNumber = $this->mailer->send($mailerMessage);
         } catch (\Swift_SwiftException $e) {
             throw new NotificationException('Error sending notification. ' . $e->getMessage(), 0, $e);
