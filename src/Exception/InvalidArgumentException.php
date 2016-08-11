@@ -1,6 +1,6 @@
 <?php
 
-namespace Sokil\NotificationBundle;
+namespace Sokil\NotificationBundle\Exception;
 
 class InvalidArgumentException extends \Exception
 {
