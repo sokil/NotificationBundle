@@ -2,6 +2,7 @@
 
 namespace Sokil\NotificationBundle;
 
+use Sokil\NotificationBundle\Exception\InvalidArgumentException;
 use Sokil\NotificationBundle\Transport\TransportInterface;
 
 class TransportProvider

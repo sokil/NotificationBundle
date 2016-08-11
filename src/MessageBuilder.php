@@ -3,6 +3,7 @@
 namespace Sokil\NotificationBundle;
 
 use Sokil\Diff\Renderer;
+use Sokil\NotificationBundle\Exception\InvalidArgumentException;
 use Sokil\NotificationBundle\Message\DiffRendererAwareInterface;
 use Sokil\NotificationBundle\Message\MessageInterface;
 use Sokil\NotificationBundle\Message\MessageFixtureInterface;

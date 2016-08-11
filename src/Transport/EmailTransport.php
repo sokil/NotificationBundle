@@ -2,10 +2,10 @@
 
 namespace Sokil\NotificationBundle\Transport;
 
-use Sokil\NotificationBundle\InvalidArgumentException;
+use Sokil\NotificationBundle\Exception\InvalidArgumentException;
 use Sokil\NotificationBundle\Message\EmailMessageInterface;
 use Sokil\NotificationBundle\Message\MessageInterface;
-use Sokil\NotificationBundle\NotificationException;
+use Sokil\NotificationBundle\Exception\NotificationException;
 
 class EmailTransport implements TransportInterface
 {
