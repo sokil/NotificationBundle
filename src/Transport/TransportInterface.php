@@ -9,9 +9,7 @@ use Sokil\TaskStockBundle\Provider\TaskNotificationTransportProvider\User;
 interface TransportInterface
 {
     /**
-     * @param Task $task
-     * @param User $user
-     * @param array $changes array of \Sokil\TaskStockBundle\Dto\ChangedValue instances
+     * @param MessageInterface $message
      * @param array $recipients
      * @return mixed
      */
