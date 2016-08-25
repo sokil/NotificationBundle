@@ -4,6 +4,8 @@ services:
   ################################################
   notification.transport.email:
     class: Sokil\NotificationBundle\Transport\EmailTransport
+    tags:
+      - {name: 'notification.transport', transportName: 'email'}
     arguments:
       - @mailer
       - %from_email_address%
@@ -11,8 +13,6 @@ services:
 
   notification.transport_provider:
     class: Sokil\NotificationBundle\TransportProvider
-    calls:
-      - [setTransport, ['email', '@notification.transport.email']]
 
   ################################################
   #                Schema                        #
@@ -25,14 +25,7 @@ services:
   ################################################
   #                Message                       #
   ################################################
-  notification.message_builder:
-    class: Sokil\NotificationBundle\MessageBuilder
-    arguments:
-      - @templating
-      - @translator
-      - @notification.text_diff_renderer
-
-  notification.text_diff_renderer:
-    class: Sokil\Diff\Renderer
-    arguments:
-      - {format: '%notification.diff_renderer.format_colour%'}
+  notification.message_builder_collection
+    class: Sokil\NotificationBundle\MessageBuilderCollection
+    tags:
+      - {name: 'notification.message_builder_collection', collectionName: 'default'}

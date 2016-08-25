@@ -8,32 +8,36 @@ use Sokil\NotificationBundle\Transport\TransportInterface;
 class TransportProvider
 {
     /**
-     * @var array
+     * @var TransportInterface[]
      */
     private $transport;
 
     /**
-     * @param $transportType
+     * Set transport
+     *
+     * @param $transportName
      * @param TransportInterface $transport
      * @return $this
      */
-    public function setTransport($transportType, TransportInterface $transport)
+    public function setTransport($transportName, TransportInterface $transport)
     {
-        $this->transport[$transportType] = $transport;
+        $this->transport[$transportName] = $transport;
         return $this;
     }
 
     /**
-     * @param $transportType
+     * Get transport by name
+     *
+     * @param $transportName
      * @return TransportInterface
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
-    public function getTransport($transportType)
+    public function getTransport($transportName)
     {
-        if (empty($this->transport[$transportType])) {
-            throw new InvalidArgumentException(sprintf('Transport %s not found', $transportType));
+        if (empty($this->transport[$transportName])) {
+            throw new InvalidArgumentException(sprintf('Transport %s not found', $transportName));
         }
 
-        return $this->transport[$transportType];
+        return $this->transport[$transportName];
     }
 }
