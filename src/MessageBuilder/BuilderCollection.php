@@ -13,6 +13,7 @@ class BuilderCollection
 
     /**
      * @param string $messageType
+     * @param string $transportName
      * @param Builder $builder
      * @return $this
      */

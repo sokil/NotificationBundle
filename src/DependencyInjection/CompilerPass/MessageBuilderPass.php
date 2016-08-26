@@ -28,6 +28,9 @@ class MessageBuilderPass implements CompilerPassInterface
             }
         }
 
+        // store list of collections to parameter
+        $container->setParameter('notification.message_builder_collection.list', $builderCollectionServiceIdList);
+
         // get builders
         $messageBuilderListDefinition = $container->findTaggedServiceIds('notification.message_builder');
         if (empty($messageBuilderListDefinition)) {

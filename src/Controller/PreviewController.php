@@ -7,33 +7,65 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PreviewController extends Controller
 {
     /**
-     * @Route("/preview/email", name="notification_preview_email")
+     * @Route("/preview", name="notification_preview_email")
      * @Method({"GET"})
      */
-    public function email(Request $request)
+    public function preview(Request $request)
     {
         // check access
-        if (!$this->isGranted('ROLE_MAIL_MANAGER')) {
+        if (!$this->isGranted('ROLE_NOTIFICATION_MAIL_PREVIEW')) {
             throw $this->createAccessDeniedException();
         }
 
+        // message type
         $messageType = $request->get('messageType');
         if (!$messageType) {
-            throw new \Exception('Message type not specified');
+            throw new BadRequestHttpException('Message type not specified');
         }
 
-        $emailMessageProvider = $this->get('notification.message_builder');
+        // transport name
+        $transportName = $request->get('transportName');
+        if (!$transportName) {
+            throw new BadRequestHttpException('Transport not specified');
+        }
 
-        $message = $emailMessageProvider->createMessage($messageType, 'email');
-        $emailMessageProvider->applyFixture($message);
+        // get collection name
+        $messageBuilderCollectionName = $request->get('collection');
+        if (!$messageBuilderCollectionName) {
+            throw new BadRequestHttpException('Collection not specified');
+        }
 
-        return $this->render('NotificationBundle:Preview:email.html.twig', [
-            'subject' => $message->getSubject(),
-            'body' => str_replace(["\r", "\n"], '', $message->getBody()),
-        ]);
+        // get collection
+        $messageBuilderCollectionList = $this->getParameter('notification.message_builder_collection.list');
+        if (empty($messageBuilderCollectionList[$messageBuilderCollectionName])) {
+            throw new BadRequestHttpException(sprintf('Collection with name %s not found', $messageBuilderCollectionName));
+        }
+
+        $messageBuilderCollectionServiceId = $messageBuilderCollectionList[$messageBuilderCollectionName];
+        $messageBuilderCollection = $this->get($messageBuilderCollectionServiceId);
+
+        // build message
+        $messageBuilder = $messageBuilderCollection
+            ->getBuilder($messageType, $transportName);
+
+        $message = $messageBuilder->createMessage();
+        $messageBuilder->applyFixture($message);
+
+        // show message
+        if ($transportName === 'email') {
+            return $this->render('NotificationBundle:Preview:email.html.twig', [
+                'subject' => $message->getSubject(),
+                'body' => str_replace(["\r", "\n"], '', $message->getBody()),
+            ]);
+        } else {
+            return $this->render('NotificationBundle:Preview:common.html.twig', [
+                'body' => str_replace(["\r", "\n"], '', $message->getBody()),
+            ]);
+        }
     }
 }

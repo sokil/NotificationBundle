@@ -21,3 +21,14 @@ composer.phar require sokil/notification-bundle
 ## Configuring message type
 
 ## Preview
+
+To enable preview, add routing to your `./app/config/routing.yml`:
+
+```yaml
+notification:
+    resource: "@NotificationBundle/Resources/config/routing.yml"
+    prefix: /notification
+```
+
+Now preview of mails available at route `/notification/preview`. 
+To access this route, you reed to have `ROLE_NOTIFICATION_MAIL_PREVIEW`.
