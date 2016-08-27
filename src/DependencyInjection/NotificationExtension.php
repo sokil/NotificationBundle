@@ -19,12 +19,13 @@ class NotificationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        // set container parameters
-        $container->setParameter('notification.schema', $config['schema']);
-
         // load services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        // reconfigure some definitions
+        $container->getDefinition('notification.schema_provider')
+            ->replaceArgument(0, $config['schema']);
 
 
     }

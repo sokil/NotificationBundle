@@ -7,9 +7,9 @@ services:
     tags:
       - {name: 'notification.transport', transportName: 'email'}
     arguments:
-      - @mailer
-      - %from_email_address%
-      - %from_email_sender_name%
+      - '@mailer'
+      - '%from_email_address%'
+      - '%from_email_sender_name%'
 
   notification.transport_provider:
     class: Sokil\NotificationBundle\TransportProvider
