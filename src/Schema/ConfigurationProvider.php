@@ -2,7 +2,7 @@
 
 namespace Sokil\NotificationBundle\Schema;
 
-use Sokil\NotificationBundle\NotificationException;
+use Sokil\NotificationBundle\Exception\NotificationException;
 
 class ConfigurationProvider
 {

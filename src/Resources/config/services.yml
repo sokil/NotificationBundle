@@ -25,7 +25,7 @@ services:
   ################################################
   #                Message                       #
   ################################################
-  notification.message_builder_collection
+  notification.message_builder_collection:
     class: Sokil\NotificationBundle\MessageBuilderCollection
     tags:
       - {name: 'notification.message_builder_collection', collectionName: 'default'}

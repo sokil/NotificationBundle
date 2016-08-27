@@ -21,7 +21,6 @@ class NotificationExtension extends Extension
 
         // set container parameters
         $container->setParameter('notification.schema', $config['schema']);
-        $container->setParameter('notification.diff_renderer.format_colour', Renderer::FORMAT_COLOUR);
 
         // load services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
