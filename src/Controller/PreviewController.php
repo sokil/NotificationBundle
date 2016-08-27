@@ -35,7 +35,7 @@ class PreviewController extends Controller
         }
 
         // get collection name
-        $messageBuilderCollectionName = $request->get('collection');
+        $messageBuilderCollectionName = $request->get('collection', 'default');
         if (!$messageBuilderCollectionName) {
             throw new BadRequestHttpException('Collection not specified');
         }

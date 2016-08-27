@@ -30,7 +30,7 @@ class TransportProviderPassTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        // email provider definition
+        // email transport provider definition
         $emailTransportDefinition = new Definition();
         $emailTransportDefinition
             ->setClass(EmailTransport::class)

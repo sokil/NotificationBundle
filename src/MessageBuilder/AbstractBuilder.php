@@ -24,7 +24,8 @@ abstract class AbstractBuilder
     {
         $fixtureClassName = get_class($message) . 'Fixture';
         if (!class_exists($fixtureClassName)) {
-            throw new InvalidArgumentException('Message fixture class not found');
+            // if no fixture found for class then it not requiore additional data to be dendered
+            return $message;
         }
 
         /** @var MessageFixtureInterface $messageFixture */
