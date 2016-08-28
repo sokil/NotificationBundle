@@ -20,7 +20,7 @@ services:
   notification.schema_provider:
     class: Sokil\NotificationBundle\Schema\ConfigurationProvider
     arguments:
-      - '%notification.schema%'
+      - {}
 
   ################################################
   #                Message                       #
