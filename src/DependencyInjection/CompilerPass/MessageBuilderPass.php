@@ -2,34 +2,18 @@
 
 namespace Sokil\NotificationBundle\DependencyInjection\CompilerPass;
 
+use Sokil\NotificationBundle\MessageBuilder\BuilderCollection;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class MessageBuilderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        // get builder collection tags
-        $messageBuilderCollectionListDefinition = $container->findTaggedServiceIds('notification.message_builder_collection');
-        if (empty ($messageBuilderCollectionListDefinition)) {
-            throw new InvalidConfigurationException('No message builder collections configured');
-        }
-
         // get service ids of collections
-        $builderCollectionServiceIdList = [];
-        foreach ($messageBuilderCollectionListDefinition as $builderCollectionServiceId => $builderCollectionDefinitionTags) {
-            foreach ($builderCollectionDefinitionTags as $builderCollectionDefinitionTag) {
-                $collectionName = empty($builderCollectionDefinitionTag['collectionName'])
-                    ? 'default'
-                    : $builderCollectionDefinitionTag['collectionName'];
-
-                $builderCollectionServiceIdList[$collectionName] = $builderCollectionServiceId;
-            }
-        }
-
-        // store list of collections to parameter
-        $container->setParameter('notification.message_builder_collection.list', $builderCollectionServiceIdList);
+        $builderCollectionServiceIdList = $this->getMessageBuilderCollectionServiceidList($container);
 
         // get builders
         $messageBuilderListDefinition = $container->findTaggedServiceIds('notification.message_builder');
@@ -56,11 +40,20 @@ class MessageBuilderPass implements CompilerPassInterface
                     : $builderDefinitionTag['collectionName'];
 
                 if (empty($builderCollectionServiceIdList[$collectionName])) {
-                    throw new InvalidConfigurationException(sprintf(
-                        'Message builder with service id "%s" configured with unexisted collection %s',
-                        $builderServiceId,
-                        $collectionName
-                    ));
+                    // message builder configured with unknown collection name.
+                    // Create new collection
+                    $messageBuilderCollectionDefinition = new Definition();
+                    $messageBuilderCollectionDefinition
+                        ->setClass(BuilderCollection::class)
+                        ->addTag('notification.message_builder_collection', [
+                            'collectionName' => $collectionName,
+                        ]);
+
+                    $builderCollectionServiceIdList[$collectionName] = 'notification.message_builder_collection.' . $collectionName;
+                    $container->setDefinition(
+                        $builderCollectionServiceIdList[$collectionName],
+                        $messageBuilderCollectionDefinition
+                    );
                 }
 
                 // add builder to collection
@@ -77,5 +70,29 @@ class MessageBuilderPass implements CompilerPassInterface
                 );
             }
         }
+
+        // store list of collections to parameter
+        $container->setParameter('notification.message_builder_collection.list', $builderCollectionServiceIdList);
+    }
+
+    /**
+     * Get service ids of collections
+     */
+    private function getMessageBuilderCollectionServiceidList(ContainerBuilder $container)
+    {
+        $builderCollectionServiceIdList = [];
+
+        $messageBuilderCollectionListDefinition = $container->findTaggedServiceIds('notification.message_builder_collection');
+        foreach ($messageBuilderCollectionListDefinition as $builderCollectionServiceId => $builderCollectionDefinitionTags) {
+            foreach ($builderCollectionDefinitionTags as $builderCollectionDefinitionTag) {
+                $collectionName = empty($builderCollectionDefinitionTag['collectionName'])
+                    ? 'default'
+                    : $builderCollectionDefinitionTag['collectionName'];
+
+                $builderCollectionServiceIdList[$collectionName] = $builderCollectionServiceId;
+            }
+        }
+
+        return $builderCollectionServiceIdList;
     }
 }

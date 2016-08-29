@@ -42,7 +42,7 @@ class MessageBuilderPassTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider testProcess_BuilderCollectionSpecifier_dataProvider
      */
-    public function testProcess_BuilderCollectionSpecifier($collection)
+    public function testProcess_BuilderCollectionSpecified($collection)
     {
         // default message builder collection definition
         $defaultMessageBuilderCollectionDefinition = new Definition();
@@ -93,11 +93,7 @@ class MessageBuilderPassTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('some body', $smsMessage->getBody());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage No message builder collections configured
-     */
-    public function testProcess_UnexistedBuilderCollectionSpecifier()
+    public function testProcess_CreateUndefinedBuilderCollection()
     {
         // message builder definition
         $someMessageBuilderDefinition = new Definition();
@@ -119,6 +115,20 @@ class MessageBuilderPassTest extends \PHPUnit_Framework_TestCase
         // compile container
         $container->addCompilerPass(new MessageBuilderPass());
         $container->compile();
+
+        // test
+        $this->assertInstanceOf(
+            BuilderCollection::class,
+            $container->get('notification.message_builder_collection.someUnexistedCollectionName')
+        );
+
+        // test existance of service in list
+        $this->assertEquals(
+            [
+                'someUnexistedCollectionName' => 'notification.message_builder_collection.someUnexistedCollectionName',
+            ],
+            $container->getParameter('notification.message_builder_collection.list')
+        );
     }
 
     /**
