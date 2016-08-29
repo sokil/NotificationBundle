@@ -84,7 +84,10 @@ To get builder from collection:
 <?php
 $someSmsMessageBuilder = $container
     ->get('acme.notification.message_builder_collection.some')
-    ->getBuilder('someMessage', 'email');
+    ->getBuilder(
+        'someMessage',  // messageType 
+        'email'         // transport
+    );
 ```
 
 If collection's service not defined, it will be created for you automatically, so 

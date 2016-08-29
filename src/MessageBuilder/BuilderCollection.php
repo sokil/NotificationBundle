@@ -23,6 +23,12 @@ class BuilderCollection
         return $this;
     }
 
+    /**
+     * @param $messageType
+     * @param $transportName
+     * @return Builder
+     * @throws InvalidArgumentException
+     */
     public function getBuilder($messageType, $transportName)
     {
         if (empty($this->collection[$messageType][$transportName])) {
