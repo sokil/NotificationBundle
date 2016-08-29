@@ -88,7 +88,8 @@ $someSmsMessageBuilder = $container
 ```
 
 If collection's service not defined, it will be created for you automatically, so 
-you need only define `collectionName` and then get collection's service from container 
+you need only define `collectionName` in message builder's tag, and then get 
+collection's service from container 
 by id `notification.message_builder_collection.{SOME_COLLECTION_NAME}`.
 
 ## Schema of notification
