@@ -17,7 +17,7 @@ class BuilderCollection
      * @param Builder $builder
      * @return $this
      */
-    public function addBuilder($messageType, $transportName, Builder $builder)
+    public function addBuilder($messageType, $transportName, AbstractBuilder $builder)
     {
         $this->collection[$messageType][$transportName] = $builder;
         return $this;
