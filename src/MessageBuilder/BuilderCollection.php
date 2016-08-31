@@ -3,6 +3,7 @@
 namespace Sokil\NotificationBundle\MessageBuilder;
 
 use Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException;
+use Sokil\NotificationBundle\Exception\MessageFixtureBuilderNotFoundException;
 use Sokil\NotificationBundle\Exception\NotificationException;
 
 class BuilderCollection
@@ -49,7 +50,7 @@ class BuilderCollection
     /**
      * @param $messageType
      * @param $transportName
-     * @return AbstractFixtureBuilder
+     * @return FixtureBuilder
      * @throws NotificationException
      */
     public function getFixtureBuilder($messageType, $transportName)
@@ -59,17 +60,36 @@ class BuilderCollection
             $transportName
         );
 
-        $fixtureBuilderClass = get_class($messageBuilder) . 'FixtureBuilder';
+        // get fixture class
+        $fixtureBuilderClass = $this->getFixtureClassName($messageBuilder);
+        if (!class_exists($fixtureBuilderClass)) {
+            throw new MessageFixtureBuilderNotFoundException(
+                sprintf(
+                    'Fixture builder class not found for message type "%s" for transport "%s"',
+                    $messageType,
+                    $transportName
+                )
+            );
+        }
 
-        $fixtureBuilder =  new $fixtureBuilderClass($this);
-        if ($fixtureBuilder instanceof AbstractFixtureBuilder) {
+        $fixtureBuilder =  new $fixtureBuilderClass($messageBuilder);
+        if ($fixtureBuilder instanceof FixtureBuilder) {
             return $fixtureBuilder;
         }
 
-        throw new NotificationException(sprintf(
-            'Fixture for message builder with type "%s" for transport "%s" not configured',
+        throw new MessageFixtureBuilderNotFoundException(sprintf(
+            'Fixture builder for message builder with type "%s" for transport "%s" not configured',
             $messageType,
             $transportName
         ));
+    }
+
+    private function getFixtureClassName(AbstractBuilder $builder)
+    {
+        $parts = explode('\\', get_class($builder));
+        $lastKey = count($parts) - 1;
+        $parts[$lastKey] = 'Fixture' . $parts[$lastKey];
+
+        return implode('\\', $parts);
     }
 }

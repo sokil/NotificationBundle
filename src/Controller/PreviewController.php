@@ -3,6 +3,8 @@
 namespace Sokil\NotificationBundle\Controller;
 
 use Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException;
+use Sokil\NotificationBundle\Exception\MessageFixtureBuilderNotFoundException;
+use Sokil\NotificationBundle\Message\EmailMessageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -53,8 +55,7 @@ class PreviewController extends Controller
 
         // build message
         try {
-            $messageBuilder = $messageBuilderCollection
-                ->getBuilder($messageType, $transportName);
+            $messageFixtureBuilder = $messageBuilderCollection->getFixtureBuilder($messageType, $transportName);
         } catch (MessageBuilderNotFoundException $e) {
             throw new BadRequestHttpException(sprintf(
                 'Message with type "%s" for transport "%s" not configured in  collection "%s"',
@@ -62,20 +63,28 @@ class PreviewController extends Controller
                 $transportName,
                 $messageBuilderCollectionName
             ));
+        } catch (MessageFixtureBuilderNotFoundException $e) {
+            throw new BadRequestHttpException(sprintf(
+                'Message fixture for builder with type "%s" for transport "%s" not configured in collection "%s"',
+                $messageType,
+                $transportName,
+                $messageBuilderCollectionName
+            ));
         }
 
-        $message = $messageBuilder->createFixture();
+        $message = $messageFixtureBuilder->createFixture();
 
-        // show message
-        if ($transportName === 'email') {
+        // show email message
+        if ($message instanceof EmailMessageInterface) {
             return $this->render('NotificationBundle:Preview:email.html.twig', [
                 'subject' => $message->getSubject(),
                 'body' => str_replace(["\r", "\n"], '', $message->getBody()),
             ]);
-        } else {
-            return $this->render('NotificationBundle:Preview:common.html.twig', [
-                'body' => str_replace(["\r", "\n"], '', $message->getBody()),
-            ]);
         }
+
+        // show message
+        return $this->render('NotificationBundle:Preview:common.html.twig', [
+            'body' => str_replace(["\r", "\n"], '', $message->getBody()),
+        ]);
     }
 }

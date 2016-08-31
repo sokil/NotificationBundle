@@ -2,7 +2,7 @@
 
 namespace Sokil\NotificationBundle\Exception;
 
-class MessageBuilderNotFoundException extends \Exception
+class MessageBuilderNotFoundException extends NotificationException
 {
 
 }

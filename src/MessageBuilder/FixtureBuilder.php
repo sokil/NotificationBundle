@@ -4,7 +4,7 @@ namespace Sokil\NotificationBundle\MessageBuilder;
 
 use Sokil\NotificationBundle\Message\MessageInterface;
 
-abstract class AbstractFixtureBuilder
+class FixtureBuilder
 {
     /**
      * @var AbstractBuilder
@@ -20,5 +20,8 @@ abstract class AbstractFixtureBuilder
      * @return MessageInterface
      * @throws \Exception
      */
-    abstract public function createFixture();
+    public function createFixture()
+    {
+        return $this->messageBuilder->createMessage();
+    }
 }

@@ -14,13 +14,4 @@ abstract class AbstractBuilder
      * @throws \Exception
      */
     abstract public function createMessage();
-
-    /**
-     * @return MessageInterface
-     * @throws \Exception
-     */
-    public function createFixture()
-    {
-        return $this->createMessage();
-    }
 }
