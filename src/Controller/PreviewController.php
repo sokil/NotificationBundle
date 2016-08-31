@@ -64,8 +64,7 @@ class PreviewController extends Controller
             ));
         }
 
-        $message = $messageBuilder->createMessage();
-        $messageBuilder->applyFixture($message);
+        $message = $messageBuilder->createFixture();
 
         // show message
         if ($transportName === 'email') {

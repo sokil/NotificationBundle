@@ -16,26 +16,11 @@ abstract class AbstractBuilder
     abstract public function createMessage();
 
     /**
-     * @param MessageInterface $message
      * @return MessageInterface
      * @throws \Exception
      */
-    public function applyFixture(MessageInterface $message)
+    public function createFixture()
     {
-        $fixtureClassName = get_class($message) . 'Fixture';
-        if (!class_exists($fixtureClassName)) {
-            // if no fixture found for class then it not requiore additional data to be dendered
-            return $message;
-        }
-
-        /** @var MessageFixtureInterface $messageFixture */
-        $messageFixture = new $fixtureClassName;
-        if (!($messageFixture instanceof MessageFixtureInterface)) {
-            throw new InvalidArgumentException('Fixture must implement MessageFixtureInterface');
-        }
-
-        $messageFixture->apply($message);
-
-        return $message;
+        return $this->createMessage();
     }
 }
