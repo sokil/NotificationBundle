@@ -167,7 +167,7 @@ class MessageBuilderPassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sokil\NotificationBundle\Exception\InvalidArgumentException
+     * @expectedException \Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException
      * @expectedExceptionMessage Message with type "unexistedMessageType" for transport "email" not configured
      */
     public function testProcess_GetUnexistedBuilder()

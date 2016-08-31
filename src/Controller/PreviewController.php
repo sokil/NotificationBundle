@@ -2,6 +2,7 @@
 
 namespace Sokil\NotificationBundle\Controller;
 
+use Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -46,12 +47,22 @@ class PreviewController extends Controller
             throw new BadRequestHttpException(sprintf('Collection with name %s not found', $messageBuilderCollectionName));
         }
 
+        /* @var $messageBuilderCollection \Sokil\NotificationBundle\MessageBuilder\BuilderCollection */
         $messageBuilderCollectionServiceId = $messageBuilderCollectionList[$messageBuilderCollectionName];
         $messageBuilderCollection = $this->get($messageBuilderCollectionServiceId);
 
         // build message
-        $messageBuilder = $messageBuilderCollection
-            ->getBuilder($messageType, $transportName);
+        try {
+            $messageBuilder = $messageBuilderCollection
+                ->getBuilder($messageType, $transportName);
+        } catch (MessageBuilderNotFoundException $e) {
+            throw new BadRequestHttpException(sprintf(
+                'Message with type "%s" for transport "%s" not configured in  collection "%s"',
+                $messageType,
+                $transportName,
+                $messageBuilderCollectionName
+            ));
+        }
 
         $message = $messageBuilder->createMessage();
         $messageBuilder->applyFixture($message);

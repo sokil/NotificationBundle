@@ -2,7 +2,7 @@
 
 namespace Sokil\NotificationBundle\MessageBuilder;
 
-use Sokil\NotificationBundle\Exception\InvalidArgumentException;
+use Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException;
 
 class BuilderCollection
 {
@@ -14,11 +14,14 @@ class BuilderCollection
     /**
      * @param string $messageType
      * @param string $transportName
-     * @param Builder $builder
+     * @param AbstractBuilder $builder
      * @return $this
      */
-    public function addBuilder($messageType, $transportName, AbstractBuilder $builder)
-    {
+    public function addBuilder(
+        $messageType,
+        $transportName,
+        AbstractBuilder $builder
+    ) {
         $this->collection[$messageType][$transportName] = $builder;
         return $this;
     }
@@ -27,12 +30,16 @@ class BuilderCollection
      * @param $messageType
      * @param $transportName
      * @return Builder
-     * @throws InvalidArgumentException
+     * @throws MessageBuilderNotFoundException
      */
     public function getBuilder($messageType, $transportName)
     {
         if (empty($this->collection[$messageType][$transportName])) {
-            throw new InvalidArgumentException(sprintf('Message with type "%s" for transport "%s" not configured', $messageType, $transportName));
+            throw new MessageBuilderNotFoundException(sprintf(
+                'Message with type "%s" for transport "%s" not configured',
+                $messageType,
+                $transportName
+            ));
         }
 
         return $this->collection[$messageType][$transportName];
