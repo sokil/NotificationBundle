@@ -9,7 +9,7 @@ class FixtureBuilder
     /**
      * @var AbstractBuilder
      */
-    private $messageBuilder;
+    protected $messageBuilder;
 
     public function __construct(AbstractBuilder $messageBuilder)
     {
