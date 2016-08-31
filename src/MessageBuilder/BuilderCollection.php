@@ -3,6 +3,7 @@
 namespace Sokil\NotificationBundle\MessageBuilder;
 
 use Sokil\NotificationBundle\Exception\MessageBuilderNotFoundException;
+use Sokil\NotificationBundle\Exception\NotificationException;
 
 class BuilderCollection
 {
@@ -43,5 +44,32 @@ class BuilderCollection
         }
 
         return $this->collection[$messageType][$transportName];
+    }
+
+    /**
+     * @param $messageType
+     * @param $transportName
+     * @return AbstractFixtureBuilder
+     * @throws NotificationException
+     */
+    public function getFixtureBuilder($messageType, $transportName)
+    {
+        $messageBuilder = $this->getBuilder(
+            $messageType,
+            $transportName
+        );
+
+        $fixtureBuilderClass = get_class($messageBuilder) . 'FixtureBuilder';
+
+        $fixtureBuilder =  new $fixtureBuilderClass($this);
+        if ($fixtureBuilder instanceof AbstractFixtureBuilder) {
+            return $fixtureBuilder;
+        }
+
+        throw new NotificationException(sprintf(
+            'Fixture for message builder with type "%s" for transport "%s" not configured',
+            $messageType,
+            $transportName
+        ));
     }
 }
