@@ -23,8 +23,10 @@ class AppKernel extends Kernel
         );
     }
 }
+```
 
 Add roles to role hierarchy in file `./app/config/security.yml`:
+
 ```yaml
 security:
     role_hierarchy:
