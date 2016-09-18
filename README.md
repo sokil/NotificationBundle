@@ -10,6 +10,27 @@ Use composer to install dependency:
 composer.phar require sokil/notification-bundle
 ```
 
+Add bundle to AppKernel:
+```php
+<?php
+
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = array(
+            new Sokil\NotificationBundle\NotificationBundle(),
+        );
+    }
+}
+
+Add roles to role hierarchy in file `./app/config/security.yml`:
+```yaml
+security:
+    role_hierarchy:
+        ROLE_NOTIFICATION_SCHEMA_MANAGER: [ROLE_USER]
+```
+
 ## Creating messages
 
 ### Message builder
