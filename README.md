@@ -30,6 +30,7 @@ Add roles to role hierarchy in file `./app/config/security.yml`:
 ```yaml
 security:
     role_hierarchy:
+        ROLE_NOTIFICATION_MAIL_PREVIEW: [ROLE_USER]
         ROLE_NOTIFICATION_SCHEMA_MANAGER: [ROLE_USER]
 ```
 
