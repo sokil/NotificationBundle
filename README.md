@@ -34,6 +34,13 @@ security:
         ROLE_NOTIFICATION_SCHEMA_MANAGER: [ROLE_USER]
 ```
 
+Add routing to `./app/config/routing.yml`:
+```yaml
+notification:
+    resource: "@NotificationBundle/Resources/config/routing.yml"
+    prefix: /notification
+```
+
 ## Creating messages
 
 ### Message builder
