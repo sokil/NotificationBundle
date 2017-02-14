@@ -40,7 +40,7 @@ class EmailTransport implements TransportInterface
         /* @var $mailerMessage \Swift_Message */
 
         if (!($message instanceof EmailMessageInterface)) {
-            throw new InvalidArgumentException('Message must implament EmailMessageInterface');
+            throw new InvalidArgumentException('Message must implement EmailMessageInterface');
         }
 
         try {
