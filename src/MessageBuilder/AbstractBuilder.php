@@ -9,7 +9,6 @@ use Sokil\NotificationBundle\Message\MessageFixtureInterface;
 abstract class AbstractBuilder
 {
     /**
-     * @param string $type
      * @return MessageInterface
      * @throws \Exception
      */
