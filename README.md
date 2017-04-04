@@ -1,6 +1,7 @@
 # Notification Bundle
 
 [![Build Status](https://travis-ci.org/sokil/NotificationBundle.svg?branch=master)](https://travis-ci.org/sokil/NotificationBundle)
+[![Coverage Status](https://coveralls.io/repos/github/sokil/NotificationBundle/badge.svg)](https://coveralls.io/github/sokil/NotificationBundle)
 
 ## Installation
 
