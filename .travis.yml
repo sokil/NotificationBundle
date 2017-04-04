@@ -15,7 +15,7 @@ before_script:
   - composer update --no-interaction
 
 script:
-  - mkdir -p build/logs
+  - mkdir -p logs
   - composer cover
 
 after_script:
