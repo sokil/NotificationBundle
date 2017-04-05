@@ -24,8 +24,17 @@ class EmailTransport implements TransportInterface
         $senderName
     ) {
         $this->mailer = $mailer;
+
+        // sender email
+        if (empty($senderEmail)) {
+            throw new \InvalidArgumentException('Sender email not configured');
+        }
         $this->senderEmail = $senderEmail;
-        $this->senderName = $senderName;
+
+        // sender name
+        if (!empty($senderName)) {
+            $this->senderName = $senderName;
+        }
     }
 
     /**

@@ -10,6 +10,7 @@ class TransportProviderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        // add transports to provider
         $transportProviderDefinition = $container->getDefinition('notification.transport_provider');
 
         $transportDefinitionList = $container->findTaggedServiceIds('notification.transport');

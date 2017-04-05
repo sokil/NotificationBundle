@@ -8,8 +8,8 @@ services:
       - {name: 'notification.transport', transportName: 'email'}
     arguments:
       - '@mailer'
-      - '%notification.from_email.address%'
-      - '%notification.from_email.sender_name%'
+      - ''
+      - ''
 
   notification.transport_provider:
     class: Sokil\NotificationBundle\TransportProvider
