@@ -145,3 +145,15 @@ notification:
 
 Now preview of mails available at route `/notification/preview`. 
 To access this route, you reed to have `ROLE_NOTIFICATION_MAIL_PREVIEW`.
+
+For example we have message builder described in service:
+```yaml
+acme.notification.message_builder.some:
+    class: Acme\Notification\Message\SomeMessageBuilder
+    tags:
+        - {name: 'notification.message_builder', messageType: 'someMessageType', transport: 'someTransport', collectionName, 'someCollection'}
+```
+To see preview, open next URL in your browser:
+```
+/notification/preview?messageType=someMessageType&transportName=someTransport&collection=someCollection
+```
