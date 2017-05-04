@@ -1,5 +1,6 @@
 # Notification Bundle
 
+[![Total Downloads][badge-totalDownloads-img]][badge-totalDownloads-url]
 [![Build Status](https://travis-ci.org/sokil/NotificationBundle.svg?branch=master)](https://travis-ci.org/sokil/NotificationBundle)
 [![Coverage Status](https://coveralls.io/repos/github/sokil/NotificationBundle/badge.svg)](https://coveralls.io/github/sokil/NotificationBundle)
 
@@ -157,3 +158,6 @@ To see preview, open next URL in your browser:
 ```
 /notification/preview?messageType=someMessageType&transportName=someTransport&collection=someCollection
 ```
+
+[badge-totalDownloads-img]: http://img.shields.io/packagist/dt/sokil/notification-bundle.svg?1
+[badge-totalDownloads-url]: https://packagist.org/packages/sokil/notification-bundle
