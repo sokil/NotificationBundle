@@ -9,7 +9,7 @@
             <div class="content">
                 <iframe id="preview" style="width: 100%; height: 450px; border: 0;"></iframe>
                 <script type="text/javascript">
-                    document.getElementById('preview').contentDocument.body.innerHTML = '{{ body | raw }}';
+                    document.getElementById('preview').contentDocument.body.innerHTML = '{{ body | raw | escape('js') }}';
                 </script>
             </div>
         </div>
